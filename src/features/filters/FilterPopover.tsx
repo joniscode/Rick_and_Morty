@@ -18,7 +18,6 @@ export default function FilterPopover({
       className="absolute left-0 top-12 z-40 w-[340px] rounded-2xl border border-gray-200 bg-white p-4 shadow-xl lg:block hidden"
       role="dialog" aria-label="Filters"
     >
-      {/* Characters */}
       <div className="mb-4">
         <div className="mb-2 text-xs font-semibold text-slate-500">Personajes</div>
         <div className="grid grid-cols-3 gap-3">
@@ -28,7 +27,6 @@ export default function FilterPopover({
         </div>
       </div>
 
-      {/* Specie */}
       <div className="mb-4">
         <div className="mb-2 text-xs font-semibold text-slate-500">Especie</div>
         <div className="grid grid-cols-3 gap-3">

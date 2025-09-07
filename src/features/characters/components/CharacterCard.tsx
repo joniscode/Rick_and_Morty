@@ -29,7 +29,6 @@ export default function CharacterCard({ c }: { c: Character }) {
         </p>
       </div>
 
-      {/* Favorito */}
       <button
         type="button"
         aria-pressed={fav}
@@ -40,7 +39,6 @@ export default function CharacterCard({ c }: { c: Character }) {
         <IconHeart filled={fav}  />
       </button>
 
-      {/* Soft delete */}
       {hidden ? (
         <button
           type="button"

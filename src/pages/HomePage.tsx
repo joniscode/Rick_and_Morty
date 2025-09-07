@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import InputSearch from "../design-system/molecules/InputSearch";
 import { useCharacters } from "../features/characters/hooks/useCharacters";
@@ -16,6 +17,7 @@ export default function HomePage() {
   const [sort] = useState<"az" | "za">("az");
   const [status] = useState<string>("");
   const [gender] = useState<string>("");
+  const navigate = useNavigate();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 

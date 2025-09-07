@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Controles base */
+  .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm border transition; }
+  .btn-ghost { @apply border-gray-200 bg-white text-slate-700 hover:bg-gray-50; }
+  .btn-primary { @apply border-transparent bg-primary-600 text-white hover:bg-primary-700; }
+  .btn-block { @apply w-full; }
+
+  .icon-btn { @apply inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition; }
+
+  /* Lista */
+  .list-item { @apply grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl px-3 py-2 hover:bg-primary-100 transition; }
+  .list-item--active { @apply bg-primary-100; }
+  .list-item__title { @apply text-sm font-semibold text-slate-900; }
+  .list-item__subtitle { @apply text-xs text-slate-500; }
+
+  /* Chip base */
+  .chip { @apply inline-flex items-center justify-center rounded-xl border text-sm transition; }
+  .chip-ghost { @apply bg-white border-gray-200 text-slate-800 hover:bg-gray-50; }
+  .chip-active { @apply bg-primary-100 border-transparent text-slate-900; }
+
+  /* Tamaño consistente para filtros */
+  .chip-lg { @apply h-11 px-0 font-medium; }     /* altura fija, sin padding lateral (lo da el grid) */
+
+  /* Badge */
+  .badge { @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium; }
+  .badge-muted { @apply bg-gray-100 text-slate-700; }
+  .badge-success { @apply bg-green-100 text-green-700; }
+
+  /* Divisor fino */
+  .divider { @apply h-px bg-gray-200; }
+
+  /* Sheet (filtros mobile a pantalla completa) */
+  .sheet { @apply fixed inset-0 z-30 flex flex-col bg-white; }
+  .sheet-header { @apply sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white; }
+  .sheet-title { @apply text-sm font-semibold text-slate-900; }
+  .sheet-body { @apply flex-1 overflow-y-auto px-4 py-4; }
+  .sheet-footer { @apply sticky bottom-0 bg-white px-4 py-3 border-t border-gray-200; }
+
+  @layer utilities {
+  /* Púrpuras: primary-600 → primary-700 → primary-100 */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 via-primary-700 to-primary-100 bg-clip-text text-transparent;
+  }
+
+  /* Púrpura → verde secundario */
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-primary-700 to-secondary-600 bg-clip-text text-transparent;
+  }
+}
+}

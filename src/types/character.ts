@@ -5,6 +5,8 @@ export type Character = {
   status: string;
   species: string;
   gender: string;
+  origin?: { name: string } | null;
+  location?: { name: string } | null;
 };
 
 export type CharactersResponse = {

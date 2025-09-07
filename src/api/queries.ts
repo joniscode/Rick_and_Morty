@@ -8,6 +8,8 @@ export const CHARACTER_CARD_FIELDS = gql`
     status
     species
     gender
+    origin { name }
+    location { name }
   }
 `;
 
@@ -33,8 +35,6 @@ export const CHARACTER_QUERY = gql`
   query Character($id: ID!) {
     character(id: $id) {
       ...CharacterCardFields
-      origin { name }
-      location { name }
     }
   }
 `;
@@ -43,7 +43,7 @@ export type CharactersVars = {
   page?: number;
   filter?: {
     name?: string;
-    status?: "alive" | "dead" | "unknown";
+    status?: "Alive" | "Dead" | "unknown"; 
     species?: string;
     type?: string;
     gender?: "Female" | "Male" | "Genderless" | "unknown";

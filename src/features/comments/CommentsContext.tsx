@@ -1,46 +1,38 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { getItem, setItem } from "../../services/local/localStorage";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
-type Comment = { id: string; text: string; createdAt: string };
-type CommentsByChar = Record<string, Comment[]>;
+type Comment = { characterId: string; text: string; date: string };
+type CommentsState = Map<string, Comment[]>;
 
-type Ctx = {
-  getComments: (charId: string) => Comment[];
-  addComment: (charId: string, text: string) => void;
+type CommentsCtx = {
+  comments: CommentsState;
+  addComment: (characterId: string, text: string) => void;
 };
 
-const CommentsCtx = createContext<Ctx | null>(null);
-const KEY = "characterComments";
+const CommentsContext = createContext<CommentsCtx | undefined>(undefined);
 
 export function CommentsProvider({ children }: { children: ReactNode }) {
-  const [comments, setComments] = useState<CommentsByChar>({});
+  const [comments, setComments] = useState<CommentsState>(new Map());
 
-  useEffect(() => {
-    setComments(getItem(KEY, {}));
-  }, []);
-
-  const getComments = (charId: string) => comments[charId] || [];
-
-  const addComment = (charId: string, text: string) => {
-    const newComment: Comment = {
-      id: crypto.randomUUID(),
-      text,
-      createdAt: new Date().toISOString(),
-    };
-    const next = { ...comments, [charId]: [...(comments[charId] || []), newComment] };
-    setComments(next);
-    setItem(KEY, next);
+  const addComment = (characterId: string, text: string) => {
+    setComments((prev) => {
+      const next = new Map(prev);
+      const arr = next.get(characterId) ?? [];
+      arr.push({ characterId, text, date: new Date().toISOString() });
+      next.set(characterId, arr);
+      return next;
+    });
   };
 
   return (
-    <CommentsCtx.Provider value={{ getComments, addComment }}>
+    <CommentsContext.Provider value={{ comments, addComment }}>
       {children}
-    </CommentsCtx.Provider>
+    </CommentsContext.Provider>
   );
 }
 
 export function useComments() {
-  const ctx = useContext(CommentsCtx);
+  const ctx = useContext(CommentsContext);
   if (!ctx) throw new Error("useComments must be used within CommentsProvider");
   return ctx;
 }

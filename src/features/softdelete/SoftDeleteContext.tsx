@@ -1,53 +1,34 @@
-import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
-import { getItem, setItem } from "../../services/local/localStorage";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
-type Ctx = {
+type SoftDeleteCtx = {
   hidden: Set<string>;
-  isHidden: (id: string) => boolean;
   hide: (id: string) => void;
-  restore: (id: string) => void;
-  restoreAll: () => void;
+  unhide: (id: string) => void;
 };
 
-const KEY = "hiddenCharacterIds";
-const SoftDeleteCtx = createContext<Ctx | null>(null);
+const SoftDeleteContext = createContext<SoftDeleteCtx | undefined>(undefined);
 
 export function SoftDeleteProvider({ children }: { children: ReactNode }) {
-  const [ids, setIds] = useState<string[]>([]);
+  const [hidden, setHidden] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    setIds(getItem<string[]>(KEY, []));
-  }, []);
+  const hide = (id: string) => setHidden((prev) => new Set(prev).add(id));
+  const unhide = (id: string) =>
+    setHidden((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
 
-  const value = useMemo<Ctx>(() => {
-    const set = new Set(ids);
-    return {
-      hidden: set,
-      isHidden: (id) => set.has(id),
-      hide: (id) => {
-        if (set.has(id)) return;
-        const next = [...set, id];
-        setIds(next);
-        setItem(KEY, next);
-      },
-      restore: (id) => {
-        if (!set.has(id)) return;
-        const next = [...Array.from(set).filter(x => x !== id)];
-        setIds(next);
-        setItem(KEY, next);
-      },
-      restoreAll: () => {
-        setIds([]);
-        setItem(KEY, []);
-      }
-    };
-  }, [ids]);
-
-  return <SoftDeleteCtx.Provider value={value}>{children}</SoftDeleteCtx.Provider>;
+  return (
+    <SoftDeleteContext.Provider value={{ hidden, hide, unhide }}>
+      {children}
+    </SoftDeleteContext.Provider>
+  );
 }
 
 export function useSoftDelete() {
-  const ctx = useContext(SoftDeleteCtx);
+  const ctx = useContext(SoftDeleteContext);
   if (!ctx) throw new Error("useSoftDelete must be used within SoftDeleteProvider");
   return ctx;
 }

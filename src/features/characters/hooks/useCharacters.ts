@@ -17,6 +17,8 @@ export function useCharacters({
   status,
   species,
   gender,
+  origin,
+  location,
 }: {
   page: number;
   search?: string;

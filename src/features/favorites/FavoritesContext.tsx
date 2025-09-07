@@ -1,42 +1,36 @@
-import { createContext, useContext, useMemo, useState, ReactNode, useEffect } from "react";
-import { getItem, setItem } from "../../services/local/localStorage";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
-type Ctx = {
+type FavoritesCtx = {
   ids: Set<string>;
   isFavorite: (id: string) => boolean;
   toggle: (id: string) => void;
 };
 
-const FavoritesCtx = createContext<Ctx | null>(null);
-const KEY = "favoriteCharacterIds";
+const FavoritesContext = createContext<FavoritesCtx | undefined>(undefined);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [idsState, setIdsState] = useState<string[]>([]);
+  const [ids, setIds] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    setIdsState(getItem<string[]>(KEY, []));
-  }, []);
+  const isFavorite = (id: string) => ids.has(id);
+  const toggle = (id: string) => {
+    setIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
-  const value = useMemo<Ctx>(() => {
-    const set = new Set(idsState);
-    return {
-      ids: set,
-      isFavorite: (id: string) => set.has(id),
-      toggle: (id: string) => {
-        const next = new Set(set);
-        next.has(id) ? next.delete(id) : next.add(id);
-        const arr = Array.from(next);
-        setIdsState(arr);
-        setItem(KEY, arr);
-      }
-    };
-  }, [idsState]);
-
-  return <FavoritesCtx.Provider value={value}>{children}</FavoritesCtx.Provider>;
+  return (
+    <FavoritesContext.Provider value={{ ids, isFavorite, toggle }}>
+      {children}
+    </FavoritesContext.Provider>
+  );
 }
 
 export function useFavorites() {
-  const ctx = useContext(FavoritesCtx);
+  const ctx = useContext(FavoritesContext);
   if (!ctx) throw new Error("useFavorites must be used within FavoritesProvider");
   return ctx;
 }

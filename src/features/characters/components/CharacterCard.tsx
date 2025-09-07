@@ -37,7 +37,7 @@ export default function CharacterCard({ c }: { c: Character }) {
         onClick={() => toggle(c.id)}
         className="icon-btn"
       >
-        <IconHeart filled={fav} title={fav ? "Quitar de favoritos" : "Agregar a favoritos"} />
+        <IconHeart filled={fav}  />
       </button>
 
       {/* Soft delete */}

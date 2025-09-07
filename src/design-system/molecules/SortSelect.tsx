@@ -1,24 +1,26 @@
-import type { SortOrder } from "../../features/characters/hooks/useCharacter";
+import { useId } from "react";
+import { SortOrder } from "@/types/sorting";
 
 type Props = {
   value: SortOrder;
   onChange: (v: SortOrder) => void;
+  className?: string;
 };
 
-export default function SortSelect({ value, onChange }: Props) {
-  const id = "sort-select";
+export default function SortSelect({ value, onChange, className }: Props) {
+  const id = useId();
   return (
-    <div className="inline-flex items-center gap-2">
-      <label htmlFor={id} className="text-sm text-gray-700">Sort</label>
+    <label htmlFor={id} className={`flex items-center gap-2 ${className ?? ""}`}>
+      <span className="text-xs text-slate-600">Orden</span>
       <select
         id={id}
+        className="select select-sm"
         value={value}
         onChange={(e) => onChange(e.target.value as SortOrder)}
-        className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
       >
-        <option value="az">A → Z</option>
-        <option value="za">Z → A</option>
+        <option value={SortOrder.AZ}>A → Z</option>
+        <option value={SortOrder.ZA}>Z → A</option>
       </select>
-    </div>
+    </label>
   );
 }

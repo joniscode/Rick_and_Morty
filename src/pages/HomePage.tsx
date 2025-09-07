@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import InputSearch from "../design-system/molecules/InputSearch";
-import SectionTitle from "../design-system/atoms/SectionTitle";
 import { useCharacters } from "../features/characters/hooks/useCharacters";
 import ListItem from "../design-system/molecules/ListItem";
 import { useFavorites } from "../features/favorites/FavoritesContext";
